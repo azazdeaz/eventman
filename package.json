@@ -1,0 +1,36 @@
+{
+  "name": "eventman",
+  "version": "0.0.0",
+  "description": "Node.js EventEmitter implementation with some extra feature (bindable scopes, subevents, no double listener registration)",
+  "main": "eventman.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --harmony --ui tdd --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/animachine/EventMan"
+  },
+  "keywords": [
+    "EventEmitter",
+    "events",
+    "pubsub",
+    "scope",
+    "this",
+    "thisArg",
+    "nodejs"
+  ],
+  "author": "Polgár András",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/animachine/EventMan/issues"
+  },
+  "homepage": "https://github.com/animachine/EventMan",
+  "devDependencies": {
+    "mocha": "^1.20.1",
+    "chai": "^1.9.1",
+    "uglify-js": "^2.4.14"
+  }
+}
