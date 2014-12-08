@@ -1,6 +1,6 @@
 {
   "name": "eventman",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Node.js EventEmitter implementation with some extra feature (bindable scopes, subevents, no double listener registration)",
   "main": "eventman.js",
   "directories": {
