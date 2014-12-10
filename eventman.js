@@ -96,12 +96,26 @@ p.listeners = function (evtName) {
     while (evtName);
 
     return ret;
-}
+};
 
 p.setMaxListeners = function (maxListeners) {
 
     this._maxListeners = parseInt(maxListeners) || 0;
 };
+
+p.removeAllListeners = function (evtName) {
+
+    this.listeners(evtName).forEach(function (reg) {
+        
+        if (typeof (reg) === 'function') {
+
+            this.removeListener(evtName, reg);
+        }
+        else {
+            this.removeListener(evtName, reg[0], reg[1]);
+        }
+    }, this);
+}
 
 //aliases
 p.on = p.addListener;

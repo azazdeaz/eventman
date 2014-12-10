@@ -175,6 +175,18 @@ suite('Test EventMan', function () {
             return ee.listeners('x').length === 0 && ee.listeners('x.y').length === 0;
         });
     });
+
+    test('removeAllListeners', function () {
+
+        var ee = new EventMan();
+
+        ee.on('x', function () {});
+        ee.on('x.y', function () {});
+
+        ee.removeAllListeners('x');
+
+        return ee.listeners('x').length === 0 && ee.listeners('x.y').length === 0;
+    })
 });
 
 
