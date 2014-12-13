@@ -17,6 +17,9 @@ p.addListener = function (evtName, cb, scope) {
         this._events[evtName] = [];
     }
 
+    if (typeof evtName !== 'string') throw 'event name must be a string';
+    if (typeof cb !== 'function') throw 'Callback must be a function!';
+
     this.removeListener(evtName, cb, scope);
 
     var liteners = this._events[evtName];
