@@ -12,6 +12,16 @@ var p = EventMan.prototype;
 
 p.addListener = function (evtName, cb, scope) {
 
+    if (evtName instanceof Array) {
+
+        for (var i = 0; i < evtName.length; ++i) {
+
+            this.addListener(evtName[i], cb, scope);
+        }
+        
+        return;
+    }
+
     if (!(evtName in this._events)) {
 
         this._events[evtName] = [];
