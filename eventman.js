@@ -5,6 +5,7 @@ function EventMan () {
     this._listenerCount = 0;
     this._maxListeners = 10;
     this._events = Object.create(null);
+    this._flags = Object.create(null);
 }
 
 module.exports = EventMan;
@@ -18,7 +19,6 @@ p.addListener = function (evtName, cb, scope) {
 
             this.addListener(evtName[i], cb, scope);
         }
-        
         return;
     }
 
@@ -32,9 +32,8 @@ p.addListener = function (evtName, cb, scope) {
 
     this.removeListener(evtName, cb, scope);
 
-    var liteners = this._events[evtName];
-
-    liteners.push(scope ? [cb, scope] : cb);
+    var liteners = this._events[evtName],
+        reg = scope ? [cb, scope] : cb;
 
     if (this._maxListeners > 0 && liteners.length > this._maxListeners) {
 
@@ -43,6 +42,13 @@ p.addListener = function (evtName, cb, scope) {
             'Use emitter.setMaxListeners() to increase limit.',
             listeners.length);
         console.trace();
+    }
+
+    liteners.push(reg);
+
+    if (evtName in this._flags) {
+
+        return this._call(reg, this._flags[evtName]);
     }
 };
 
@@ -80,17 +86,27 @@ p.emit = function (evtName) {
 
     for (var i = 0, l = listeners.length; i < l; ++i) {
 
-        reg = listeners[i];
-
-        if (typeof (reg) === 'function') {
-
-            reg.apply(this, args);
-        }
-        else {
-            reg[0].apply(reg[1], args);
-        }
+        this._call(listeners[i], args);
     }
 };
+
+p.flag = function (evtName) {
+
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    this._flags[evtName] = args;
+};
+
+p._call = function (reg, args) {
+
+    if (typeof (reg) === 'function') {
+
+        reg.apply(this, args);
+    }
+    else {
+        reg[0].apply(reg[1], args);
+    }
+}
 
 p.listeners = function (evtName) {
 
@@ -128,7 +144,7 @@ p.removeAllListeners = function (evtName) {
             this.removeListener(evtName, reg[0], reg[1]);
         }
     }, this);
-}
+};
 
 //aliases
 p.on = p.addListener;

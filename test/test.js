@@ -186,7 +186,50 @@ suite('Test EventMan', function () {
         ee.removeAllListeners('x');
 
         return ee.listeners('x').length === 0 && ee.listeners('x.y').length === 0;
-    })
+    });
+
+     suite('flags', function () {
+
+        var ee = new EventMan(),
+            xFired = 0;
+
+        function onX (param) {
+
+            ++xFired;
+
+            if (param) xFired += param;
+        } 
+        
+
+
+        
+        test('call listener instantly after sunbscribeing for a flagged event', function () {
+            
+            ee.flag('x');
+            ee.on('x', onX);
+
+            return xFired === 1;
+        });
+        
+        test('still fire flagged events on emit', function () {
+            
+            ee.emit('x');
+
+            return xFired === 2;
+        });
+        
+        test('recive flagged event parameters', function () {
+            
+            var param;
+
+            ee.flag('y', 'flagged y event');
+            ee.on('y', function (e) {
+                param = e;
+            });
+
+            return param === 'flagged y event';
+        });
+    });
 });
 
 
