@@ -32,19 +32,19 @@ p.addListener = function (evtName, cb, scope) {
 
     this.removeListener(evtName, cb, scope);
 
-    var liteners = this._events[evtName],
+    var listeners = this._events[evtName],
         reg = scope ? [cb, scope] : cb;
 
-    if (this._maxListeners > 0 && liteners.length > this._maxListeners) {
+    if (this._maxListeners > 0 && listeners.length > this._maxListeners) {
 
-        console.error('(node) warning: possible EventEmitter memory ' +
+        throw Error('(node) warning: possible EventEmitter memory ' +
             'leak detected. %d listeners added. ' +
             'Use emitter.setMaxListeners() to increase limit.',
             listeners.length);
         console.trace();
     }
 
-    liteners.push(reg);
+    listeners.push(reg);
 
     if (evtName in this._flags) {
 
