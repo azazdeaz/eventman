@@ -54,6 +54,15 @@ p.addListener = function (evtName, cb, scope) {
 
 p.removeListener = function (evtName, cb, scope) {
 
+    if (evtName instanceof Array) {
+
+        for (var i = 0; i < evtName.length; ++i) {
+
+            this.removeListener(evtName[i], cb, scope);
+        }
+        return;
+    }
+
     var reg, cb, listeners = this._events[evtName];
 
     if (listeners) {
@@ -76,6 +85,18 @@ p.removeListener = function (evtName, cb, scope) {
                 }
             }
         }
+    }
+};
+
+p.once = function (evtName, cb, scope) {
+
+    this.addListener(evtName, onceCb);
+
+    function onceCb() {
+
+        this.removeListener(evtName, onceCb);
+        
+        this._call([cb, scope], arguments);
     }
 };
 
