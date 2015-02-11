@@ -41,7 +41,6 @@ p.addListener = function (evtName, cb, scope) {
             'leak detected. %d listeners added. ' +
             'Use emitter.setMaxListeners() to increase limit.',
             listeners.length);
-        console.trace();
     }
 
     listeners.push(reg);
@@ -63,7 +62,7 @@ p.removeListener = function (evtName, cb, scope) {
         return;
     }
 
-    var reg, cb, listeners = this._events[evtName];
+    var reg, listeners = this._events[evtName];
 
     if (listeners) {
 
@@ -80,7 +79,7 @@ p.removeListener = function (evtName, cb, scope) {
             }
             else {
                 if (reg[0] === cb && reg[1] === scope) {
-                    
+
                     listeners.splice(i--, 1);
                 }
             }
@@ -95,14 +94,14 @@ p.once = function (evtName, cb, scope) {
     function onceCb() {
 
         this.removeListener(evtName, onceCb);
-        
+
         this._call([cb, scope], arguments);
     }
 };
 
 p.emit = function (evtName) {
 
-    var reg, args = Array.prototype.slice.call(arguments, 1),
+    var args = Array.prototype.slice.call(arguments, 1),
         listeners = this.listeners(evtName);
 
     for (var i = 0, l = listeners.length; i < l; ++i) {
@@ -127,11 +126,11 @@ p._call = function (reg, args) {
     else {
         reg[0].apply(reg[1], args);
     }
-}
+};
 
 p.listeners = function (evtName) {
 
-    var listeners, i, l, ret = [];
+    var listeners, ret = [];
 
     do {
         listeners = this._events[evtName];
@@ -156,7 +155,7 @@ p.setMaxListeners = function (maxListeners) {
 p.removeAllListeners = function (evtName) {
 
     this.listeners(evtName).forEach(function (reg) {
-        
+
         if (typeof (reg) === 'function') {
 
             this.removeListener(evtName, reg);
