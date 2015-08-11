@@ -22,6 +22,10 @@ p.addListener = function (evtName, cb, scope) {
         return;
     }
 
+    if (!evtName || typeof cb !== 'function') {//HACK
+      throw Error('missing evtName or callback - ' + evtName + '|' + cb)
+    }
+
     if (!(evtName in this._events)) {
 
         this._events[evtName] = [];
